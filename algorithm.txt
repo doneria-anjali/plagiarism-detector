@@ -1,0 +1,40 @@
+Assumptions:
+	- file can have multiple paragraphs
+	- only special characters it has are '.' and ','. 
+		We can extend file cleaning to other special characters.
+	- words are separated by single-space
+	- plagiarism will be detected if both the files have same number of words
+	- the location of n-tuple words matters for plagiarism detection
+	- not removing stopwords
+
+1. Inputs can be taken as an object with 4 attributes (preferred) or independent variables
+	check for values for file paths - they are mandatory if not output error
+
+2. Open synonyms file and process the synonym keywords and store -- one-time operation of O(n)
+	Make a map of each word linked to its list of synonyms 
+	(assuming we have sufficient in-memory space to load and store the file)
+ 
+3. Open file 1.txt, create a list of N-tuples from the input sentences -- O(n) 
+	where n is total no of words in the file
+		do we need to clean sentences?
+		what about different punctuations?
+
+4. Open file2.txt and create the list of N-tuples from the input sentences similar to step 3 
+		-- O(n) where n is total no of words in the file
+		Do the number of words needs to match in both the files? 
+		Will we check plagiarism if they are unequal?
+		(Here I am assuming they are same and we return -1 if tuples have different sizes)
+		
+5. Start parsing on each generated tuple from Step3 for file1.txt
+	- get corresponding tuple (residing on index i) from file2.txt 
+		(assuming two pieces of texts are considered plagiarized 
+			if they have similar placement in the bigger text)
+	- match each word in this tuple
+		-	if it matches then continue to next word
+			else extract synonyms of this word from synonym map 
+			and check any of that is used in the second tuple being analyzed
+				if yes continue
+				else break the loop (the two tuples are not same)
+		-  if the end of the tuple is reached, it means all of the words in both the tuples match and increment the count of match
+
+6. find the percentage of matches and return 
